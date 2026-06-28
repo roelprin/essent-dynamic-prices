@@ -1,20 +1,23 @@
 from __future__ import annotations
 
-import voluptuous as vol
+import aiohttp
+import async_timeout
 
-from homeassistant import config_entries
-
-from .const import DOMAIN
+from .const import API_URL
 
 
-class EssentDynamicConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    VERSION = 2
+class EssentDynamicApiClient:
+    async def async_get_prices(self) -> dict:
+        headers = {
+            "Accept": "application/json",
+            "x-request-origin": "client",
+            "User-Agent": "Home Assistant Essent Dynamic Prices",
+        }
 
-    async def async_step_user(self, user_input=None):
-        await self.async_set_unique_id(DOMAIN)
-        self._abort_if_unique_id_configured()
-
-        if user_input is not None:
-            return self.async_create_entry(title="Essent Dynamic Prices", data={})
-
-        return self.async_show_form(step_id="user", data_schema=vol.Schema({}))
+        async with async_timeout.timeout(20):
+            async with aiohttp.ClientSession() as session:
+                async with session.get(API_URL, headers=headers) as response:
+                    if response.status != 200:
+                        text = await response.text()
+                        raise RuntimeError(f"Essent API returned {response.status}: {text[:150]}")
+                    return await response.json()

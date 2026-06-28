@@ -1,13 +1,23 @@
-{
-  "domain": "essent_dynamic",
-  "name": "Essent Dynamic Prices",
-  "version": "3.1.1",
-  "codeowners": [
-    "@roelprin"
-  ],
-  "config_flow": true,
-  "documentation": "https://github.com/roelprin/essent-dynamic-prices",
-  "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/roelprin/essent-dynamic-prices/issues",
-  "requirements": []
-}
+name: Validate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  hassfest:
+    name: Hassfest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    name: HACS validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hacs/action@main
+        with:
+          category: integration

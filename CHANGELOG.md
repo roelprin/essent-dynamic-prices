@@ -1,62 +1,49 @@
-# Changelog
+from __future__ import annotations
 
-## v3.2.0
+from homeassistant.components.binary_sensor import BinarySensorEntity
 
-Dashboard Edition.
-
-### Added
-
-- Complete dashboard stack example.
-- 24-hour ApexCharts card.
-- 48-hour today/tomorrow ApexCharts card.
-- Smart markdown summary card.
-- Dashboard documentation.
-
-### Notes
-
-This release does not change the entity model. It only adds dashboard examples and documentation.
+from .const import DOMAIN
+from .data import current_electricity_tariff, today
+from .entity import EssentDynamicEntity
 
 
-## v3.1.1
+class EssentDynamicBinarySensor(EssentDynamicEntity, BinarySensorEntity):
+    def __init__(self, coordinator, key: str, name: str, icon: str | None = None):
+        super().__init__(coordinator)
+        self._key = key
+        self._attr_name = name
+        self._attr_unique_id = f"essent_dynamic_{key}"
+        self._attr_icon = icon
 
-Bugfix release.
+    @property
+    def is_on(self):
+        tariff = current_electricity_tariff(self.coordinator)
+        current = (tariff or {}).get("totalAmount")
+        day = today(self.coordinator)
 
-### Fixed
+        if current is None:
+            return False
 
-- Removes obsolete experimental entities from older v1/v2 builds during config-entry migration.
-- Prevents removed experimental sensors from staying visible as `Unavailable` after upgrading to the compact v3 entity model.
+        if self._key == "negative_price":
+            return current < 0
 
-### Notes
+        avg = (day or {}).get("electricity", {}).get("averageAmount")
+        if avg is None:
+            return False
 
-After installing this update through HACS, restart Home Assistant. The migration runs during startup.
+        if self._key == "cheap_hour":
+            return current < avg
+        if self._key == "expensive_hour":
+            return current > avg
+
+        return False
 
 
-## v3.1.0
+async def async_setup_entry(hass, entry, async_add_entities):
+    coordinator = hass.data[DOMAIN][entry.entry_id]
 
-Professionalization release.
-
-### Added
-
-- Repository logo asset.
-- Expanded README with installation and dashboard examples.
-- Dutch and English translation files.
-- GitHub Actions workflow for Hassfest and HACS validation.
-- Improved HACS metadata.
-- Better release documentation.
-
-### Notes
-
-- The Home Assistant integration page may still show `icon not available`. For custom integrations, the official integration icon is normally handled through the Home Assistant brands repository. The local logo is used for repository documentation and future HACS presentation.
-
-## v3.0.0
-
-Refactor release.
-
-### Added
-
-- API client module.
-- Coordinator module.
-- Shared entity base class.
-- Data helper module.
-- Diagnostics support.
-- Compact entity model.
+    async_add_entities([
+        EssentDynamicBinarySensor(coordinator, "cheap_hour", "Goedkoop stroomuur", "mdi:thumb-up"),
+        EssentDynamicBinarySensor(coordinator, "expensive_hour", "Duur stroomuur", "mdi:thumb-down"),
+        EssentDynamicBinarySensor(coordinator, "negative_price", "Negatieve stroomprijs", "mdi:cash-minus"),
+    ])
