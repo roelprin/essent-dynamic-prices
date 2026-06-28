@@ -1,7 +1,138 @@
-<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="112" fill="#00A7D8"/>
-  <circle cx="256" cy="256" r="170" fill="white" opacity="0.96"/>
-  <path d="M175 292c32 32 78 41 120 24 34-14 58-41 69-74 4-11-9-19-17-11-19 20-45 32-74 32-43 0-81-27-96-67-4-10-18-9-21 2-8 34-1 69 19 94z" fill="#00A7D8"/>
-  <path d="M326 154c-28-22-69-27-104-10-31 15-53 43-61 76-3 12 12 19 20 10 18-22 45-36 76-36 39 0 74 23 90 58 5 10 19 8 21-3 7-36-9-73-42-95z" fill="#F7C948"/>
-  <path d="M251 121l-22 72h54l-25 99 85-126h-57l30-45h-65z" fill="#253858"/>
-</svg>
+# Essent Dynamic Prices for Home Assistant
+
+![Essent Dynamic Prices](images/logo.svg)
+
+A Home Assistant custom integration for Essent dynamic energy prices.
+
+This integration reads Essent's public dynamic pricing endpoint and exposes current electricity, gas and hourly price data in Home Assistant.
+
+> Status: active development. This is not an official Essent integration.
+
+> Upgrading from experimental v1/v2 builds? v3.1.1 removes obsolete experimental entities automatically during startup.
+
+## Features
+
+### Sensors
+
+- ⚡ Current electricity price
+- ➡️ Next hour electricity price
+- 🔥 Current gas price
+- 📉 Lowest electricity price today
+- 📈 Highest electricity price today
+- 📊 Average electricity price today
+- 🕐 Cheapest hour today
+- 🕘 Most expensive hour today
+- 📋 Hourly prices with detailed attributes
+
+### Binary sensors
+
+- 🟢 Cheap electricity hour
+- 🔴 Expensive electricity hour
+- ⚫ Negative electricity price
+
+### Attributes
+
+The hourly prices sensor exposes:
+
+- `today`
+- `tomorrow`
+- `today_summary`
+- `tomorrow_summary`
+
+The current electricity price sensor exposes:
+
+- market price
+- energy tax
+- purchasing fee
+- VAT
+- price excluding VAT
+
+## Installation via HACS
+
+1. Open **HACS**.
+2. Go to **Integrations**.
+3. Open the three-dot menu.
+4. Choose **Custom repositories**.
+5. Add this repository URL.
+6. Category: **Integration**.
+7. Install **Essent Dynamic Prices**.
+8. Restart Home Assistant.
+9. Add the integration via **Settings → Devices & services → Add integration**.
+
+## Manual installation
+
+Copy this folder:
+
+```text
+custom_components/essent_dynamic
+```
+
+to:
+
+```text
+/config/custom_components/essent_dynamic
+```
+
+Restart Home Assistant.
+
+## Dashboard example
+
+Install **ApexCharts Card** through HACS and use the `Uurprijzen` sensor attributes to draw today and tomorrow price charts.
+
+Example:
+
+```yaml
+type: custom:apexcharts-card
+header:
+  show: true
+  title: Essent stroomprijzen vandaag
+graph_span: 24h
+span:
+  start: day
+now:
+  show: true
+  label: Nu
+series:
+  - entity: sensor.essent_dynamic_prices_uurprijzen
+    name: Vandaag
+    type: column
+    data_generator: |
+      const data = entity.attributes.today || [];
+      return data.map((item) => {
+        return [new Date(item.start).getTime(), item.price];
+      });
+apex_config:
+  yaxis:
+    decimalsInFloat: 3
+    title:
+      text: €/kWh
+```
+
+If your entity is named differently, replace the entity ID.
+
+## Notes about tomorrow prices
+
+Tomorrow's electricity prices are only available after Essent publishes them. Until then, the `tomorrow` attribute is empty and `tomorrow_summary` contains null values.
+
+## Development
+
+The integration structure:
+
+```text
+custom_components/essent_dynamic/
+├── api.py
+├── binary_sensor.py
+├── config_flow.py
+├── const.py
+├── coordinator.py
+├── data.py
+├── diagnostics.py
+├── entity.py
+├── manifest.json
+├── sensor.py
+└── translations/
+```
+
+## License
+
+MIT

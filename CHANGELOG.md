@@ -1,56 +1,46 @@
-{
-  "title": "Essent Dynamic Prices",
-  "config": {
-    "step": {
-      "user": {
-        "title": "Essent Dynamic Prices",
-        "description": "Voeg de publieke dynamische energieprijzen van Essent toe aan Home Assistant. Er is geen login nodig."
-      }
-    },
-    "abort": {
-      "already_configured": "Essent Dynamic Prices is al geconfigureerd."
-    }
-  },
-  "entity": {
-    "sensor": {
-      "electricity_current": {
-        "name": "Stroomprijs nu"
-      },
-      "electricity_next": {
-        "name": "Stroomprijs volgend uur"
-      },
-      "gas_current": {
-        "name": "Gasprijs nu"
-      },
-      "electricity_min_today": {
-        "name": "Laagste stroomprijs vandaag"
-      },
-      "electricity_max_today": {
-        "name": "Hoogste stroomprijs vandaag"
-      },
-      "electricity_avg_today": {
-        "name": "Gemiddelde stroomprijs vandaag"
-      },
-      "electricity_cheapest_hour_today": {
-        "name": "Goedkoopste uur vandaag"
-      },
-      "electricity_most_expensive_hour_today": {
-        "name": "Duurste uur vandaag"
-      },
-      "electricity_prices": {
-        "name": "Uurprijzen"
-      }
-    },
-    "binary_sensor": {
-      "cheap_hour": {
-        "name": "Goedkoop stroomuur"
-      },
-      "expensive_hour": {
-        "name": "Duur stroomuur"
-      },
-      "negative_price": {
-        "name": "Negatieve stroomprijs"
-      }
-    }
-  }
-}
+# Changelog
+
+## v3.1.1
+
+Bugfix release.
+
+### Fixed
+
+- Removes obsolete experimental entities from older v1/v2 builds during config-entry migration.
+- Prevents removed experimental sensors from staying visible as `Unavailable` after upgrading to the compact v3 entity model.
+
+### Notes
+
+After installing this update through HACS, restart Home Assistant. The migration runs during startup.
+
+# Changelog
+
+## v3.1.0
+
+Professionalization release.
+
+### Added
+
+- Repository logo asset.
+- Expanded README with installation and dashboard examples.
+- Dutch and English translation files.
+- GitHub Actions workflow for Hassfest and HACS validation.
+- Improved HACS metadata.
+- Better release documentation.
+
+### Notes
+
+- The Home Assistant integration page may still show `icon not available`. For custom integrations, the official integration icon is normally handled through the Home Assistant brands repository. The local logo is used for repository documentation and future HACS presentation.
+
+## v3.0.0
+
+Refactor release.
+
+### Added
+
+- API client module.
+- Coordinator module.
+- Shared entity base class.
+- Data helper module.
+- Diagnostics support.
+- Compact entity model.
