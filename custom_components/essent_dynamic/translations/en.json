@@ -39,6 +39,9 @@
       },
       "electricity_prices": {
         "name": "Hourly prices"
+      },
+      "energy_advice": {
+        "name": "Energy advice"
       }
     },
     "binary_sensor": {

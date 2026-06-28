@@ -133,6 +133,89 @@ class HourPricesSensor(EssentDynamicSensor):
         }
 
 
+
+
+class EnergyAdviceSensor(EssentDynamicSensor):
+    @property
+    def native_value(self):
+        day = today(self.coordinator)
+        info = summary(day)
+        current = current_electricity_tariff(self.coordinator)
+        next_tariff = next_electricity_tariff(self.coordinator)
+
+        current_price = (current or {}).get("totalAmount")
+        next_price = (next_tariff or {}).get("totalAmount")
+        avg = info.get("average")
+        cheapest_hour = info.get("cheapest_hour")
+        cheapest_price = info.get("cheapest_price")
+        expensive_hour = info.get("most_expensive_hour")
+        expensive_price = info.get("most_expensive_price")
+        cheap_block = info.get("cheapest_block_below_average")
+
+        if current_price is None:
+            return "Geen prijsdata beschikbaar"
+
+        if current_price < 0:
+            return "Nu veel stroom gebruiken: de totaalprijs is negatief"
+
+        market_price = group_amount(current, "MARKET_PRICE")
+        if market_price is not None and market_price < 0:
+            return "Goed moment: de kale beursprijs is negatief"
+
+        if avg is not None and current_price < avg:
+            if next_price is not None and next_price < current_price:
+                diff = current_price - next_price
+                return f"Wacht eventueel nog even: volgend uur is €{diff:.3f}/kWh goedkoper"
+            return "Goed moment om stroom te gebruiken"
+
+        if cheapest_price is not None and current_price == cheapest_price:
+            return "Nu is het goedkoopste uur van vandaag"
+
+        if cheapest_hour and cheapest_price is not None:
+            diff = current_price - cheapest_price
+            if diff > 0.05:
+                return f"Stel groot verbruik uit tot {cheapest_hour}: dat is €{diff:.3f}/kWh goedkoper"
+            return f"Goedkoopste uur is {cheapest_hour}"
+
+        if next_price is not None and next_price > current_price and expensive_hour:
+            return f"Gebruik stroom liever nu dan later; duurste uur is {expensive_hour}"
+
+        if expensive_price is not None and current_price >= expensive_price:
+            return "Duurste uur actief: stel groot verbruik uit"
+
+        if cheap_block:
+            return f"Goedkoop blok vandaag: {cheap_block.get('start')}–{cheap_block.get('end')}"
+
+        return "Geen bijzonder advies"
+
+    @property
+    def extra_state_attributes(self):
+        day = today(self.coordinator)
+        info = summary(day)
+        current = current_electricity_tariff(self.coordinator)
+        next_tariff = next_electricity_tariff(self.coordinator)
+
+        current_price = (current or {}).get("totalAmount")
+        next_price = (next_tariff or {}).get("totalAmount")
+        avg = info.get("average")
+        cheapest_price = info.get("cheapest_price")
+
+        return {
+            "current_price": current_price,
+            "next_price": next_price,
+            "average_price": avg,
+            "cheapest_hour": info.get("cheapest_hour"),
+            "cheapest_price": cheapest_price,
+            "most_expensive_hour": info.get("most_expensive_hour"),
+            "most_expensive_price": info.get("most_expensive_price"),
+            "cheapest_block": info.get("cheapest_block_below_average"),
+            "current_market_price": group_amount(current, "MARKET_PRICE"),
+            "difference_to_average": round(current_price - avg, 5) if current_price is not None and avg is not None else None,
+            "difference_to_cheapest": round(current_price - cheapest_price, 5) if current_price is not None and cheapest_price is not None else None,
+            "next_hour_difference": round(next_price - current_price, 5) if current_price is not None and next_price is not None else None,
+        }
+
+
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]
 
@@ -146,4 +229,5 @@ async def async_setup_entry(hass, entry, async_add_entities):
         HourSensor(coordinator, "electricity_cheapest_hour_today", "Goedkoopste uur vandaag", "mdi:clock-star-four-points"),
         HourSensor(coordinator, "electricity_most_expensive_hour_today", "Duurste uur vandaag", "mdi:clock-alert"),
         HourPricesSensor(coordinator, "electricity_prices", "Uurprijzen", "mdi:table-clock"),
+        EnergyAdviceSensor(coordinator, "energy_advice", "Energy advies", "mdi:lightbulb-on-outline"),
     ])

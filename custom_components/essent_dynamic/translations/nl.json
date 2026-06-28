@@ -39,6 +39,9 @@
       },
       "electricity_prices": {
         "name": "Uurprijzen"
+      },
+      "energy_advice": {
+        "name": "Energy advies"
       }
     },
     "binary_sensor": {
