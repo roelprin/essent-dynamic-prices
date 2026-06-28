@@ -1,0 +1,14 @@
+{
+  "title": "Essent Dynamic Prices",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Essent Dynamic Prices",
+        "description": "Use Essent public dynamic energy prices."
+      }
+    },
+    "abort": {
+      "already_configured": "Essent Dynamic Prices is already configured."
+    }
+  }
+}

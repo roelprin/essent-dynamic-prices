@@ -1,0 +1,14 @@
+{
+  "title": "Essent Dynamic Prices",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Essent Dynamic Prices",
+        "description": "Gebruik de publieke dynamische tarieven van Essent."
+      }
+    },
+    "abort": {
+      "already_configured": "Essent Dynamic Prices is al geconfigureerd."
+    }
+  }
+}

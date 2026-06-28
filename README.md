@@ -1,47 +1,32 @@
 # Essent Dynamic Prices for Home Assistant
 
-Een Home Assistant custom integratie voor dynamische energieprijzen van Essent.
+Home Assistant custom integration for Essent dynamic energy prices.
 
-## Functionaliteit
+## Features
 
-- ⚡ Huidige stroomprijs
-- ➡️ Volgende uurprijs
-- 🔥 Gasprijs
-- 📉 Laagste prijs vandaag
-- 📈 Hoogste prijs vandaag
-- 📊 Gemiddelde prijs vandaag
-- 🕐 Goedkoopste uur
-- 🕘 Duurste uur
-- 📋 Alle uurprijzen
-- 🟢 Goedkoop stroomuur
-- 🔴 Duur stroomuur
-- ⚫ Negatieve stroomprijs
+- Current electricity price
+- Next hour electricity price
+- Current gas price
+- Lowest, highest and average electricity price today
+- Cheapest and most expensive hour today
+- Hourly prices for dashboard charts
+- Cheap hour, expensive hour and negative price binary sensors
+- Detailed attributes for market price, taxes, VAT and purchasing fee
 
-## Installatie
+## Installation via HACS
 
-### Via HACS
+1. Open HACS.
+2. Go to Integrations.
+3. Add this repository as a custom repository.
+4. Category: Integration.
+5. Install **Essent Dynamic Prices**.
+6. Restart Home Assistant.
+7. Add the integration via Settings → Devices & services.
 
-1. HACS → Integraties
-2. Custom repositories
-3. Voeg deze repository toe
-4. Installeer "Essent Dynamic Prices"
+## Dashboard
 
-### Handmatig
-
-Kopieer de map:
-
-```
-custom_components/essent_dynamic
-```
-
-naar:
-
-```
-config/custom_components/
-```
-
-Herstart daarna Home Assistant.
+The `Uurprijzen` sensor exposes `today`, `tomorrow`, `today_summary` and `tomorrow_summary` attributes for ApexCharts dashboards.
 
 ## Status
 
-🚧 In ontwikkeling.
+In active development.

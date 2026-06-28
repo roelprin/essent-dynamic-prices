@@ -1,11 +1,13 @@
 {
   "domain": "essent_dynamic",
   "name": "Essent Dynamic Prices",
-  "version": "2.4.0",
-  "codeowners": [],
+  "version": "3.0.0",
+  "codeowners": [
+    "@roelprin"
+  ],
   "config_flow": true,
-  "dependencies": [],
-  "documentation": "https://www.essent.nl/dynamische-tarieven",
+  "documentation": "https://github.com/roelprin/essent-dynamic-prices",
   "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/roelprin/essent-dynamic-prices/issues",
   "requirements": []
 }
