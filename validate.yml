@@ -1,0 +1,22 @@
+---
+name: Bug report
+about: Report a problem with Essent Dynamic Prices
+title: "[Bug]: "
+labels: bug
+assignees: ""
+---
+
+## Describe the bug
+
+## Expected behavior
+
+## Home Assistant version
+
+## Integration version
+
+## Relevant entities
+
+## Logs
+```text
+
+```
