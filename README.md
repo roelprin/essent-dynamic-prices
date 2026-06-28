@@ -138,15 +138,13 @@ custom_components/essent_dynamic/
 MIT
 
 
-## Energy advice
+## Energy Intelligence
 
-Since v3.3.0 the integration includes an `Energy advies` sensor.
+Since v3.4.0 the integration includes Energy Intelligence sensors:
 
-It gives a short actionable recommendation, for example:
+- `Energy advisor`
+- `Energy score`
+- `Wachttijd advies`
+- `Potentiële besparing`
 
-- Good moment to use electricity
-- Wait until the cheapest hour
-- Current market price is negative
-- This is the most expensive hour, postpone large loads
-
-The sensor also exposes attributes for dashboards and automations.
+The advisor uses current price, next-hour price, daily average, cheapest hour and cheapest block information to provide a short recommendation and detailed attributes for dashboards and automations.

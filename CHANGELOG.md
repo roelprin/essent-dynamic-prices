@@ -1,25 +1,32 @@
 # Changelog
 
-## v3.3.0
+## v3.4.0
 
-Energy Advice release.
+Energy Intelligence release.
 
 ### Added
 
-- New `Energy advies` sensor.
-- Simple dynamic advice based on:
-  - current electricity price
-  - next hour price
-  - day average
-  - cheapest hour
-  - cheapest block
-  - negative market price
-- Useful attributes for dashboards and automations:
+- New `advisor.py` module.
+- New `Energy advisor` sensor.
+- New `Energy score` sensor.
+- New `Wachttijd advies` sensor.
+- New `Potentiële besparing` sensor.
+- Advisor attributes:
+  - score
+  - rating
+  - confidence
+  - reasons
+  - recommended devices
+  - current rank
   - difference to average
   - difference to cheapest hour
-  - next hour price difference
-  - current market price
+  - next hour difference
   - cheapest block
+  - potential saving
+
+### Notes
+
+This release introduces the first version of the central Energy Advisor logic.
 
 
 ## v3.1.1

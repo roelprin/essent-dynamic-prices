@@ -40,8 +40,17 @@
       "electricity_prices": {
         "name": "Uurprijzen"
       },
-      "energy_advice": {
-        "name": "Energy advies"
+      "energy_advisor": {
+        "name": "Energy advisor"
+      },
+      "energy_score": {
+        "name": "Energy score"
+      },
+      "energy_wait_time": {
+        "name": "Wachttijd advies"
+      },
+      "energy_potential_saving": {
+        "name": "Potentiële besparing"
       }
     },
     "binary_sensor": {
