@@ -1,0 +1,102 @@
+# Essent Dynamic Prices dashboard cards
+# Plak deze kaarten via Dashboard → Bewerken → + Kaart toevoegen → Handmatige kaart.
+#
+# Let op: controleer jouw entity IDs. Bij jou was Uurprijzen waarschijnlijk:
+# sensor.essent_dynamic_prices_uurprijzen_2
+
+type: vertical-stack
+cards:
+  - type: entities
+    title: Essent Dynamic Prices
+    entities:
+      - entity: sensor.essent_dynamic_prices_stroomprijs_nu
+        name: Stroomprijs nu
+      - entity: sensor.essent_dynamic_prices_stroomprijs_volgend_uur
+        name: Volgend uur
+      - entity: sensor.essent_dynamic_prices_gasprijs_nu
+        name: Gasprijs nu
+      - entity: sensor.essent_dynamic_prices_laagste_stroomprijs_vandaag
+        name: Laagste vandaag
+      - entity: sensor.essent_dynamic_prices_hoogste_stroomprijs_vandaag
+        name: Hoogste vandaag
+      - entity: sensor.essent_dynamic_prices_gemiddelde_stroomprijs_vandaag
+        name: Gemiddelde vandaag
+      - entity: sensor.essent_dynamic_prices_goedkoopste_uur_vandaag
+        name: Goedkoopste uur
+      - entity: sensor.essent_dynamic_prices_duurste_uur_vandaag
+        name: Duurste uur
+      - entity: binary_sensor.essent_dynamic_prices_goedkoop_stroomuur
+        name: Goedkoop stroomuur
+      - entity: binary_sensor.essent_dynamic_prices_duur_stroomuur
+        name: Duur stroomuur
+      - entity: binary_sensor.essent_dynamic_prices_negatieve_stroomprijs
+        name: Negatieve stroomprijs
+
+  - type: custom:apexcharts-card
+    header:
+      show: true
+      title: Essent stroomprijzen vandaag
+      show_states: true
+      colorize_states: true
+    graph_span: 24h
+    span:
+      start: day
+    now:
+      show: true
+      label: Nu
+    series:
+      - entity: sensor.essent_dynamic_prices_uurprijzen_2
+        name: Vandaag
+        type: column
+        data_generator: |
+          const data = entity.attributes.today || [];
+          return data.map((item) => {
+            return [new Date(item.start).getTime(), item.price];
+          });
+    apex_config:
+      yaxis:
+        decimalsInFloat: 3
+        title:
+          text: €/kWh
+      xaxis:
+        labels:
+          datetimeFormatter:
+            hour: HH:mm
+
+  - type: custom:apexcharts-card
+    header:
+      show: true
+      title: Essent stroomprijzen vandaag en morgen
+      show_states: false
+    graph_span: 48h
+    span:
+      start: day
+    now:
+      show: true
+      label: Nu
+    series:
+      - entity: sensor.essent_dynamic_prices_uurprijzen_2
+        name: Vandaag
+        type: column
+        data_generator: |
+          const data = entity.attributes.today || [];
+          return data.map((item) => {
+            return [new Date(item.start).getTime(), item.price];
+          });
+      - entity: sensor.essent_dynamic_prices_uurprijzen_2
+        name: Morgen
+        type: column
+        data_generator: |
+          const data = entity.attributes.tomorrow || [];
+          return data.map((item) => {
+            return [new Date(item.start).getTime(), item.price];
+          });
+    apex_config:
+      yaxis:
+        decimalsInFloat: 3
+        title:
+          text: €/kWh
+      xaxis:
+        labels:
+          datetimeFormatter:
+            hour: HH:mm

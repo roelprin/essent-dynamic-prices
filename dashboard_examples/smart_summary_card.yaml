@@ -1,0 +1,28 @@
+# Slimme Essent-samenvatting
+# Plak via Dashboard → Bewerken → + Kaart toevoegen → Handmatige kaart.
+
+type: entities
+title: Essent slimme samenvatting
+entities:
+  - entity: sensor.essent_dynamic_prices_uurprijzen_2
+    name: Uurprijzen
+  - type: attribute
+    entity: sensor.essent_dynamic_prices_uurprijzen_2
+    attribute: today_summary.cheapest_price
+    name: Goedkoopste prijs vandaag
+  - type: attribute
+    entity: sensor.essent_dynamic_prices_uurprijzen_2
+    attribute: today_summary.most_expensive_price
+    name: Duurste prijs vandaag
+  - type: attribute
+    entity: sensor.essent_dynamic_prices_uurprijzen_2
+    attribute: today_summary.spread
+    name: Prijsverschil vandaag
+  - type: attribute
+    entity: sensor.essent_dynamic_prices_uurprijzen_2
+    attribute: today_summary.hours_below_average
+    name: Uren onder gemiddelde
+  - type: attribute
+    entity: sensor.essent_dynamic_prices_uurprijzen_2
+    attribute: today_summary.negative_market_hours
+    name: Uren negatieve beursprijs

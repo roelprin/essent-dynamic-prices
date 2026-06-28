@@ -1,0 +1,16 @@
+# Slim advies kaart voor Essent Dynamic v2.4.0
+# Plak via Dashboard → Bewerken → + Kaart toevoegen → Handmatige kaart.
+
+type: entities
+title: Essent slim advies
+entities:
+  - entity: sensor.essent_dynamic_prices_slim_advies
+    name: Advies
+  - entity: sensor.essent_dynamic_prices_goedkoop_blok_vandaag
+    name: Goedkoop blok
+  - entity: sensor.essent_dynamic_prices_gemiddelde_prijs_goedkoop_blok
+    name: Gem. prijs goedkoop blok
+  - entity: sensor.essent_dynamic_prices_prijsverschil_vandaag
+    name: Prijsverschil
+  - entity: sensor.essent_dynamic_prices_uren_negatieve_beursprijs
+    name: Negatieve beursprijsuren
