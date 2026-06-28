@@ -75,7 +75,7 @@ to:
 
 Restart Home Assistant.
 
-## Dashboard example
+## Dashboard examples
 
 Install **ApexCharts Card** through HACS and use the `Uurprijzen` sensor attributes to draw today and tomorrow price charts.
 
@@ -136,3 +136,18 @@ custom_components/essent_dynamic/
 ## License
 
 MIT
+
+
+## Dashboard Edition
+
+Since v3.2.0 the repository includes ready-to-use dashboard examples in:
+
+```text
+dashboard_examples/
+```
+
+Included examples:
+
+- Complete dashboard stack
+- 48-hour today/tomorrow chart
+- Smart markdown summary using `today_summary`

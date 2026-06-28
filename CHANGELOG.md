@@ -1,5 +1,22 @@
 # Changelog
 
+## v3.2.0
+
+Dashboard Edition.
+
+### Added
+
+- Complete dashboard stack example.
+- 24-hour ApexCharts card.
+- 48-hour today/tomorrow ApexCharts card.
+- Smart markdown summary card.
+- Dashboard documentation.
+
+### Notes
+
+This release does not change the entity model. It only adds dashboard examples and documentation.
+
+
 ## v3.1.1
 
 Bugfix release.
@@ -13,7 +30,6 @@ Bugfix release.
 
 After installing this update through HACS, restart Home Assistant. The migration runs during startup.
 
-# Changelog
 
 ## v3.1.0
 

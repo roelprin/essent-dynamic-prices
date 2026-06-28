@@ -1,0 +1,118 @@
+# Essent Dynamic Prices - Dashboard Edition v3.2.0
+#
+# Vereist:
+# - HACS Frontend: ApexCharts Card
+#
+# Gebruik:
+# Dashboard → Bewerken → + Kaart toevoegen → Handmatige kaart
+#
+# Controleer jouw entity IDs. Vervang ze indien nodig.
+
+type: vertical-stack
+cards:
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: tile
+        entity: sensor.essent_dynamic_prices_stroomprijs_nu
+        name: Stroomprijs nu
+        icon: mdi:cash
+        vertical: false
+      - type: tile
+        entity: sensor.essent_dynamic_prices_stroomprijs_volgend_uur
+        name: Volgend uur
+        icon: mdi:clock-next
+        vertical: false
+      - type: tile
+        entity: sensor.essent_dynamic_prices_gasprijs_nu
+        name: Gasprijs nu
+        icon: mdi:fire
+        vertical: false
+      - type: tile
+        entity: binary_sensor.essent_dynamic_prices_goedkoop_stroomuur
+        name: Goedkoop uur
+        icon: mdi:thumb-up
+        vertical: false
+
+  - type: entities
+    title: Vandaag
+    entities:
+      - entity: sensor.essent_dynamic_prices_laagste_stroomprijs_vandaag
+        name: Laagste prijs
+      - entity: sensor.essent_dynamic_prices_goedkoopste_uur_vandaag
+        name: Goedkoopste uur
+      - entity: sensor.essent_dynamic_prices_gemiddelde_stroomprijs_vandaag
+        name: Gemiddelde prijs
+      - entity: sensor.essent_dynamic_prices_hoogste_stroomprijs_vandaag
+        name: Hoogste prijs
+      - entity: sensor.essent_dynamic_prices_duurste_uur_vandaag
+        name: Duurste uur
+      - entity: binary_sensor.essent_dynamic_prices_negatieve_stroomprijs
+        name: Negatieve prijs
+
+  - type: custom:apexcharts-card
+    header:
+      show: true
+      title: Essent stroomprijzen vandaag
+      show_states: true
+      colorize_states: true
+    graph_span: 24h
+    span:
+      start: day
+    now:
+      show: true
+      label: Nu
+    series:
+      - entity: sensor.essent_dynamic_prices_uurprijzen
+        name: Vandaag
+        type: column
+        data_generator: |
+          const data = entity.attributes.today || [];
+          return data.map((item) => {
+            return [new Date(item.start).getTime(), item.price];
+          });
+      - entity: sensor.essent_dynamic_prices_gemiddelde_stroomprijs_vandaag
+        name: Gemiddelde
+        type: line
+        stroke_width: 2
+        data_generator: |
+          const hourly = hass.states['sensor.essent_dynamic_prices_uurprijzen']?.attributes?.today || [];
+          const avg = Number(entity.state);
+          return hourly.map((item) => {
+            return [new Date(item.start).getTime(), avg];
+          });
+    apex_config:
+      chart:
+        height: 320
+      yaxis:
+        decimalsInFloat: 3
+        title:
+          text: €/kWh
+      xaxis:
+        labels:
+          datetimeFormatter:
+            hour: HH:mm
+      tooltip:
+        x:
+          format: HH:mm
+
+  - type: markdown
+    title: Slimme samenvatting
+    content: >
+      {% set s = state_attr('sensor.essent_dynamic_prices_uurprijzen', 'today_summary') %}
+
+      {% if s %}
+      **Goedkoopste uur:** {{ s.cheapest_hour }} — €{{ s.cheapest_price | round(3) }}/kWh  
+      **Duurste uur:** {{ s.most_expensive_hour }} — €{{ s.most_expensive_price | round(3) }}/kWh  
+      **Prijsverschil:** €{{ s.spread | round(3) }}/kWh  
+      **Uren onder gemiddelde:** {{ s.hours_below_average }}  
+      **Negatieve beursprijsuren:** {{ s.negative_market_hours }}
+
+      {% if s.cheapest_block_below_average %}
+      **Goedkoop blok:** {{ s.cheapest_block_below_average.start }}–{{ s.cheapest_block_below_average.end }}  
+      **Gemiddelde goedkoop blok:** €{{ s.cheapest_block_below_average.average | round(3) }}/kWh
+      {% endif %}
+      {% else %}
+      Geen samenvatting beschikbaar.
+      {% endif %}

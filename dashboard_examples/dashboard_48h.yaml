@@ -1,0 +1,50 @@
+# Essent Dynamic Prices - 48-uurs grafiek
+#
+# Vereist:
+# - HACS Frontend: ApexCharts Card
+#
+# Let op:
+# Morgenprijzen zijn pas zichtbaar wanneer Essent ze publiceert.
+
+type: custom:apexcharts-card
+header:
+  show: true
+  title: Essent stroomprijzen vandaag en morgen
+  show_states: false
+graph_span: 48h
+span:
+  start: day
+now:
+  show: true
+  label: Nu
+series:
+  - entity: sensor.essent_dynamic_prices_uurprijzen
+    name: Vandaag
+    type: column
+    data_generator: |
+      const data = entity.attributes.today || [];
+      return data.map((item) => {
+        return [new Date(item.start).getTime(), item.price];
+      });
+  - entity: sensor.essent_dynamic_prices_uurprijzen
+    name: Morgen
+    type: column
+    data_generator: |
+      const data = entity.attributes.tomorrow || [];
+      return data.map((item) => {
+        return [new Date(item.start).getTime(), item.price];
+      });
+apex_config:
+  chart:
+    height: 320
+  yaxis:
+    decimalsInFloat: 3
+    title:
+      text: €/kWh
+  xaxis:
+    labels:
+      datetimeFormatter:
+        hour: HH:mm
+  tooltip:
+    x:
+      format: dd MMM HH:mm
