@@ -4,11 +4,53 @@
     "step": {
       "user": {
         "title": "Essent Dynamic Prices",
-        "description": "Gebruik de publieke dynamische tarieven van Essent."
+        "description": "Voeg de publieke dynamische energieprijzen van Essent toe aan Home Assistant. Er is geen login nodig."
       }
     },
     "abort": {
       "already_configured": "Essent Dynamic Prices is al geconfigureerd."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "electricity_current": {
+        "name": "Stroomprijs nu"
+      },
+      "electricity_next": {
+        "name": "Stroomprijs volgend uur"
+      },
+      "gas_current": {
+        "name": "Gasprijs nu"
+      },
+      "electricity_min_today": {
+        "name": "Laagste stroomprijs vandaag"
+      },
+      "electricity_max_today": {
+        "name": "Hoogste stroomprijs vandaag"
+      },
+      "electricity_avg_today": {
+        "name": "Gemiddelde stroomprijs vandaag"
+      },
+      "electricity_cheapest_hour_today": {
+        "name": "Goedkoopste uur vandaag"
+      },
+      "electricity_most_expensive_hour_today": {
+        "name": "Duurste uur vandaag"
+      },
+      "electricity_prices": {
+        "name": "Uurprijzen"
+      }
+    },
+    "binary_sensor": {
+      "cheap_hour": {
+        "name": "Goedkoop stroomuur"
+      },
+      "expensive_hour": {
+        "name": "Duur stroomuur"
+      },
+      "negative_price": {
+        "name": "Negatieve stroomprijs"
+      }
     }
   }
 }

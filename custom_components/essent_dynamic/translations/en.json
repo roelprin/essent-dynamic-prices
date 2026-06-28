@@ -4,11 +4,53 @@
     "step": {
       "user": {
         "title": "Essent Dynamic Prices",
-        "description": "Use Essent public dynamic energy prices."
+        "description": "Add Essent public dynamic energy prices to Home Assistant. No login required."
       }
     },
     "abort": {
       "already_configured": "Essent Dynamic Prices is already configured."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "electricity_current": {
+        "name": "Current electricity price"
+      },
+      "electricity_next": {
+        "name": "Next hour electricity price"
+      },
+      "gas_current": {
+        "name": "Current gas price"
+      },
+      "electricity_min_today": {
+        "name": "Lowest electricity price today"
+      },
+      "electricity_max_today": {
+        "name": "Highest electricity price today"
+      },
+      "electricity_avg_today": {
+        "name": "Average electricity price today"
+      },
+      "electricity_cheapest_hour_today": {
+        "name": "Cheapest hour today"
+      },
+      "electricity_most_expensive_hour_today": {
+        "name": "Most expensive hour today"
+      },
+      "electricity_prices": {
+        "name": "Hourly prices"
+      }
+    },
+    "binary_sensor": {
+      "cheap_hour": {
+        "name": "Cheap electricity hour"
+      },
+      "expensive_hour": {
+        "name": "Expensive electricity hour"
+      },
+      "negative_price": {
+        "name": "Negative electricity price"
+      }
     }
   }
 }

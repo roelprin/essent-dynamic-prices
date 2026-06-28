@@ -1,49 +1,31 @@
-from __future__ import annotations
+# Changelog
 
-from homeassistant.components.binary_sensor import BinarySensorEntity
+## v3.1.0
 
-from .const import DOMAIN
-from .data import current_electricity_tariff, today
-from .entity import EssentDynamicEntity
+Professionalization release.
 
+### Added
 
-class EssentDynamicBinarySensor(EssentDynamicEntity, BinarySensorEntity):
-    def __init__(self, coordinator, key: str, name: str, icon: str | None = None):
-        super().__init__(coordinator)
-        self._key = key
-        self._attr_name = name
-        self._attr_unique_id = f"essent_dynamic_{key}"
-        self._attr_icon = icon
+- Repository logo asset.
+- Expanded README with installation and dashboard examples.
+- Dutch and English translation files.
+- GitHub Actions workflow for Hassfest and HACS validation.
+- Improved HACS metadata.
+- Better release documentation.
 
-    @property
-    def is_on(self):
-        tariff = current_electricity_tariff(self.coordinator)
-        current = (tariff or {}).get("totalAmount")
-        day = today(self.coordinator)
+### Notes
 
-        if current is None:
-            return False
+- The Home Assistant integration page may still show `icon not available`. For custom integrations, the official integration icon is normally handled through the Home Assistant brands repository. The local logo is used for repository documentation and future HACS presentation.
 
-        if self._key == "negative_price":
-            return current < 0
+## v3.0.0
 
-        avg = (day or {}).get("electricity", {}).get("averageAmount")
-        if avg is None:
-            return False
+Refactor release.
 
-        if self._key == "cheap_hour":
-            return current < avg
-        if self._key == "expensive_hour":
-            return current > avg
+### Added
 
-        return False
-
-
-async def async_setup_entry(hass, entry, async_add_entities):
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-
-    async_add_entities([
-        EssentDynamicBinarySensor(coordinator, "cheap_hour", "Goedkoop stroomuur", "mdi:thumb-up"),
-        EssentDynamicBinarySensor(coordinator, "expensive_hour", "Duur stroomuur", "mdi:thumb-down"),
-        EssentDynamicBinarySensor(coordinator, "negative_price", "Negatieve stroomprijs", "mdi:cash-minus"),
-    ])
+- API client module.
+- Coordinator module.
+- Shared entity base class.
+- Data helper module.
+- Diagnostics support.
+- Compact entity model.
