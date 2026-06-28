@@ -1,0 +1,8 @@
+{
+  "name": "Essent Dynamic Prices",
+  "country": "NL",
+  "homeassistant": "2025.1.0",
+  "render_readme": true,
+  "filename": false,
+  "zip_release": false
+}
